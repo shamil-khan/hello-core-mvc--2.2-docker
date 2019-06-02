@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using hello_core_mvc.Models;
 
 namespace hello_core_mvc
@@ -34,8 +35,15 @@ namespace hello_core_mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var host = Configuration["DBHOST"] ?? "localhost";
+            var port = Configuration["DBPORT"] ?? "3306";
+            var password = Configuration["DBPASSWORD"] ?? "mysecret";
+
+            services.AddDbContext<ProductDbContext>(options =>
+                options.UseMySql($"server={host};userid=root;pwd={password};port={port};database=products"));
+
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddTransient<IRepository, InMemoryRepository>();
+            services.AddTransient<IRepository, MySqlDbRepository>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -73,6 +81,8 @@ namespace hello_core_mvc
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            SeedData.EnsurePopulated(app);
         }
     }
 }
