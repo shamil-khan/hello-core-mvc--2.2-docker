@@ -1,6 +1,26 @@
 # hello-core-mvc--2.2-docker
 The test project to explore asp.net core 2.2 in docker
 
+# Docker commands used
+```sh
+# pull mysql from docker-hub and inspect it.  "Volumes": { "/var/lib/mysql": {} }
+docker pull mysql:8.0.0
+docker inspect mysql:8.0.0
+
+# create docker volume
+docker volume create --name product-data
+
+# run mysql container with docker-volume
+docker run --name mysql -v product-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mysecret -e bind-address=0.0.0.0 mysql:8.0.0
+
+# find ip address of the msql container
+docker network inspect bridge
+
+# run the app container with mysql-dbhost environment variable
+docker run --name helloCoreMVC3000 -p 3000:80 -e DBHOST=172.17.0.2 hello-core-mvc
+```
+
+
 # To build docker images and run containers  
 
 To build the docker-image
