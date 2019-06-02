@@ -17,7 +17,7 @@ namespace hello_core_mvc.Controllers
         public HomeController(IRepository repo, IConfiguration config)
         {
             repository = repo;
-            message = config ["MESSAGE"] ?? "Hello Core MVC - Product App";
+            message = config ["MESSAGE"] ?? "";
         }
 
         public IActionResult Index()

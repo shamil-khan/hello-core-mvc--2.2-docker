@@ -18,6 +18,11 @@ docker network inspect bridge
 
 # run the app container with mysql-dbhost environment variable
 docker run --name helloCoreMVC3000 -p 3000:80 -e DBHOST=172.17.0.2 hello-core-mvc
+
+# run multiple instances of app with same mysql-db.
+docker run -d -p 3001:80 --name helloCoreMVC3001 -e DBHOST=172.17.0.2 -e MESSAGE="Server#3001" hello-core-mvc
+docker run -d -p 3002:80 --name helloCoreMVC3002 -e DBHOST=172.17.0.2 -e MESSAGE="Server#3002" hello-core-mvc
+docker run -d -p 3003:80 --name helloCoreMVC3003 -e DBHOST=172.17.0.2 -e MESSAGE="Server#3003" hello-core-mvc
 ```
 
 
